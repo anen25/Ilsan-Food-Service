@@ -5,10 +5,10 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
 
-    // Debug: Log Firebase env vars during build
-    console.log('🔥 Firebase ENV check:', {
-      hasApiKey: !!process.env.VITE_FIREBASE_API_KEY,
-      hasProjectId: !!process.env.VITE_FIREBASE_PROJECT_ID,
+    // Debug: Log Firebase env vars during build (v2)
+    console.log('🔥 Firebase ENV check v2:', {
+      apiKey: process.env.VITE_FIREBASE_API_KEY ? '✅ SET' : '❌ MISSING',
+      projectId: process.env.VITE_FIREBASE_PROJECT_ID ? '✅ SET' : '❌ MISSING',
     });
 
     return {
