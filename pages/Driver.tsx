@@ -427,6 +427,7 @@ export const Driver: React.FC = () => {
         </div>
     );
 
+    // DeliveryCard 컴포넌트 끝
     if (loading) return <div className="p-8 text-center pt-20">로딩중...</div>;
 
     return (
@@ -465,6 +466,8 @@ export const Driver: React.FC = () => {
                     >
                         <i className="fa-solid fa-chart-simple mr-1"></i>나의 실적
                     </button>
+                </div>
+
                 {/* ===== 금일 배송 탭 ===== */}
                 {activeTab === 'today' && (
                     <div className="space-y-4">
