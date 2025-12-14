@@ -133,7 +133,7 @@ export const Admin: React.FC = () => {
   const fetchOrders = async () => {
     const { data, error } = await supabase
       .from('orders')
-      .select('*, users(name, business_name, phone)')
+      .select('*, users!orders_user_id_fkey(name, business_name, phone)')
       .order('created_at', { ascending: false });
 
     if (error) console.error('Orders error:', error);
