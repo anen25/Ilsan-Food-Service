@@ -199,6 +199,11 @@ export const Navbar: React.FC = () => {
                     <i className="fa-solid fa-user-tie mr-1"></i>매니저
                   </Link>
                 )}
+                {(user.role === 'admin' || user.role === 'driver') && (
+                  <Link to="/driver" className="text-green-600 font-bold hover:text-green-800">
+                    <i className="fa-solid fa-truck mr-1"></i>배송 매니저
+                  </Link>
+                )}
                 {isAdmin && (
                   <Link to="/admin" className="text-red-600 font-bold hover:text-red-800">관리자</Link>
                 )}
@@ -263,6 +268,11 @@ export const Navbar: React.FC = () => {
                 {(user.role === 'admin' || user.role === 'manager') && (
                   <MobileNavLink to="/manager" currentPath={location.pathname} onClose={() => setIsOpen(false)}>
                     매니저 대시보드
+                  </MobileNavLink>
+                )}
+                {(user.role === 'admin' || user.role === 'driver') && (
+                  <MobileNavLink to="/driver" currentPath={location.pathname} onClose={() => setIsOpen(false)}>
+                    배송 매니저
                   </MobileNavLink>
                 )}
                 {isAdmin && (

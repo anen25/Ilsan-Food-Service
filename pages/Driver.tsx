@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { UserProfile, Order, ApronRequest } from '../types';
 
@@ -16,20 +17,43 @@ interface DeliveryRoute {
 }
 
 export const Driver: React.FC = () => {
+    const navigate = useNavigate();
     const [routes, setRoutes] = useState<DeliveryRoute[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentLocation, setCurrentLocation] = useState<GeolocationCoordinates | null>(null);
+    const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
     useEffect(() => {
+        checkDriverAndFetch();
+    }, []);
+
+    const checkDriverAndFetch = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            alert('로그인이 필요합니다.');
+            navigate('/');
+            return;
+        }
+
+        const { data: user } = await supabase.from('users').select('*').eq('id', session.user.id).single();
+        if (!user || (user.role !== 'driver' && user.role !== 'admin')) {
+            alert('접근 권한이 없습니다.');
+            navigate('/');
+            return;
+        }
+        setCurrentUser(user as UserProfile);
+
+        // Fetch delivery items
         fetchDeliveryItems();
-        // get user location
+
+        // Get user location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => setCurrentLocation(pos.coords),
                 (err) => console.error("Location error", err)
             );
         }
-    }, []);
+    };
 
     const fetchDeliveryItems = async () => {
         setLoading(true);
@@ -109,7 +133,8 @@ export const Driver: React.FC = () => {
         <div className="max-w-xl mx-auto p-4 bg-gray-100 min-h-screen">
             <h1 className="text-xl font-bold mb-4 flex items-center">
                 <i className="fa-solid fa-truck text-blue-600 mr-2"></i>
-                기사님 배송 대시보드
+                배송 매니저 대시보드
+                {currentUser?.role === 'admin' && <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-1 rounded">Admin Access</span>}
             </h1>
 
             <div className="bg-white p-4 rounded-lg shadow mb-4">
