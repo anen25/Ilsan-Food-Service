@@ -7,11 +7,18 @@ export interface UserProfile {
   business_name_updated?: boolean;
   business_number_updated?: boolean;
   phone: string | null;
-  role: 'user' | 'admin' | 'manager';
+  role: 'user' | 'admin' | 'manager' | 'driver';
   created_at: string;
   terms_agreed_at?: string | null;
   privacy_agreed_at?: string | null;
   is_blocked?: boolean;
+  // Driver & Notification fields
+  assigned_region?: string | null; // 배송 담당 지역
+  fcm_token?: string | null;
+  notification_settings?: {
+    push_enabled: boolean;
+    marketing: boolean;
+  };
 }
 
 export interface UserAddress {
@@ -46,16 +53,22 @@ export interface Order {
   user_id: string;
   user_name?: string; // Joined view
   business_name?: string; // Snapshot column
+  phone?: string; // Snapshot column
   items: OrderItem[];
   total_amount: number;
   total_boxes: number;
   service_items: OrderItem[];
   delivery_address?: string;
   created_at: string;
-  status: 'pending' | 'confirmed' | 'delivered' | 'cancelled';
+  status: 'pending' | 'confirmed' | 'in_transit' | 'delivered' | 'cancelled';
   payment_method: 'credit' | 'card'; // Default 'credit'
   payment_status: 'unpaid' | 'paid'; // Default 'unpaid'
   paid_at?: string | null;
+  // 배송기사 관련 필드
+  assigned_driver_id?: string | null; // 배정된 배송기사
+  driver_confirmed_at?: string | null; // 배송기사 확인 시간
+  departed_at?: string | null; // 배송 출발 시간
+  delivered_at?: string | null; // 배송 완료 시간
 }
 
 export interface ApronRequest {
