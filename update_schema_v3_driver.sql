@@ -39,14 +39,7 @@ COMMENT ON COLUMN public.orders.departed_at IS 'Timestamp when driver started th
 COMMENT ON COLUMN public.orders.delivered_at IS 'Timestamp when delivery was completed';
 COMMENT ON COLUMN public.users.assigned_region IS 'Region assigned to driver for delivery (e.g., 일산동구, 일산서구)';
 
--- 7. RLS Policy for drivers to view assigned orders
--- Drop existing policy first, then create new one
-DROP POLICY IF EXISTS "Drivers can view assigned orders" ON public.orders;
-CREATE POLICY "Drivers can view assigned orders"
-ON public.orders FOR SELECT
-USING (
-    auth.uid() = assigned_driver_id
-    OR auth.uid() = user_id
-    OR EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'manager'))
-);
+-- 7. RLS Policy - REMOVED (causing issues with existing policies)
+-- The existing RLS policies on orders table should remain unchanged.
+-- Driver access will be handled through application logic, not RLS.
 
