@@ -4,14 +4,22 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { supabase } from "./supabase";
 
 // Firebase Cloud Messaging Configuration
-// Environment variables are set in Cloudflare Pages
+// Environment variables injected via vite.config.ts define
+declare const __FIREBASE_API_KEY__: string;
+declare const __FIREBASE_AUTH_DOMAIN__: string;
+declare const __FIREBASE_PROJECT_ID__: string;
+declare const __FIREBASE_STORAGE_BUCKET__: string;
+declare const __FIREBASE_MESSAGING_SENDER_ID__: string;
+declare const __FIREBASE_APP_ID__: string;
+declare const __FIREBASE_VAPID_KEY__: string;
+
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_PROJECT.firebaseapp.com",
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_PROJECT.appspot.com",
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_SENDER_ID",
-    appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID"
+    apiKey: __FIREBASE_API_KEY__,
+    authDomain: __FIREBASE_AUTH_DOMAIN__,
+    projectId: __FIREBASE_PROJECT_ID__,
+    storageBucket: __FIREBASE_STORAGE_BUCKET__,
+    messagingSenderId: __FIREBASE_MESSAGING_SENDER_ID__,
+    appId: __FIREBASE_APP_ID__
 };
 
 // Initialize Firebase only if config is present to avoid errors during dev
@@ -24,7 +32,7 @@ export const requestNotificationPermission = async (userId: string) => {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
             const token = await getToken(messaging, {
-                vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY || 'YOUR_VAPID_KEY'
+                vapidKey: __FIREBASE_VAPID_KEY__
             });
 
             if (token && userId) {
