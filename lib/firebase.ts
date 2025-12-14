@@ -3,8 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { supabase } from "./supabase";
 
-// ⚠️ IMPORTANT: Replace these with your actual Firebase Project keys
-// You can get these from the Firebase Console -> Project Settings
+// Firebase Cloud Messaging Configuration
+// Environment variables are set in Cloudflare Pages
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_PROJECT.firebaseapp.com",
